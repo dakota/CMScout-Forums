@@ -117,6 +117,7 @@ String.prototype.trim = function() {
 	return this.replace(/^\s+|\s+$/g,"");
 }
 
+	<?php if ($paginator->hasNext()) :?>
 	$("#replyButton").click(function(){
 		jConfirm('You are not on the last page of this thread, are you sure you wish to post your message?', 'Post message', function(selection){
 			if (selection)
@@ -126,6 +127,7 @@ String.prototype.trim = function() {
 		});
 		return false;
 	});
+	<?php endif;?>
 
 	$(".edit").click(function() {
 		var post = $(this).parent('div').siblings('.post');

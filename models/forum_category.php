@@ -32,17 +32,16 @@ class ForumCategory extends ForumsAppModel
  		{
  			$returnForum = array();
 
-			$numberThreads = $this->ForumForum->ForumThread->find('count', array('contain' => false, 'conditions' => array('ForumThread.forum_forum_id' => $forum['id'])));
 			$threadList = $this->ForumForum->ForumThread->find('list', array('contain' => false, 'conditions' => array('ForumThread.forum_forum_id' => $forum['id'])));
-			$numberPosts = $this->ForumForum->ForumThread->ForumPost->find('count', array('contain' => false, 'conditions' => array('ForumPost.forum_thread_id' => array_keys($threadList))));
+			$numberPosts = $this->ForumForum->ForumThread->find('first', array('fields' => array('SUM(ForumThread.forum_post_count) AS numberPosts'), 'contain' => false, 'conditions' => array('ForumThread.forum_forum_id' => $forum['id'])));
 			$lastPost = $this->ForumForum->ForumThread->ForumPost->find('first', array('contain' => array('User', 'ForumThread'), 'conditions' => array('ForumPost.forum_thread_id' => array_keys($threadList)), 'order' => array('ForumPost.created DESC')));
 			$hasUnread = $this->ForumForum->ForumThread->ForumUnreadPost->find('count', array('conditions' => array('ForumUnreadPost.user_id' => $userId, 'ForumUnreadPost.forum_thread_id' => array_keys($threadList))));
 
 			$returnForum['title'] = $forum['title'];
 			$returnForum['slug'] = $forum['slug'];
 			$returnForum['description'] = $forum['description'];
-			$returnForum['number_threads'] = $numberThreads;
-			$returnForum['number_posts'] = $numberPosts;
+			$returnForum['number_threads'] = $forum['forum_thread_count'];
+			$returnForum['number_posts'] = $numberPosts[0]['numberPosts'];
 			$returnForum['lastPost'] = $lastPost;
 			$returnForum['unreadPost'] = $hasUnread;
 			$returnForum['ChildForum'] = $this->ForumForum->find('all', array('order' => 'ForumForum.lft ASC', 'contain' => false, 'conditions' => array('ForumForum.parent_id' => $forum['id'])));

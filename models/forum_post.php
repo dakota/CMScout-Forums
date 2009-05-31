@@ -2,7 +2,7 @@
 class ForumPost extends ForumsAppModel
 {
  var $name = 'ForumPost';
- var $belongsTo = array('ForumThread' => array('className' => 'Forums.ForumThread'), 
+ var $belongsTo = array('ForumThread' => array('className' => 'Forums.ForumThread', 'counterCache' => true), 
  						'User' => array('fields' => array("id", "username", "avatar", "signature")),
  						'EditUser' => array('fields' => array("id", "username"),
  											'className' => 'User',

@@ -576,16 +576,17 @@ class ForumsController extends ForumsAppController
 	
 	function lock($threadSlug)
 	{
-		$threadSlug = Sanitize::paranoid($threadSlug);
-		$this->ForumThread->updateAll(array('ForumThread.locked' => 'NOT ForumThread.locked'), array('ForumThread.slug' => $threadSlug));
+		$thread = $this->ForumThread->find('first', array('conditions' => array('ForumThread.slug' => $threadSlug), 'contain' => array('ForumForum')));
 
+		$this->ForumThread->id = $thread['ForumThread']['id'];
+		$this->ForumThread->saveField('locked', !$thread['ForumThread']['locked']);	
+		
 		if($this->_isAjax)
 		{
 			exit;
 		}
 		else
 		{
-			$thread = $this->ForumThread->find('first', array('conditions' => array('ForumThread.slug' => $threadSlug), 'contain' => array('ForumForum')));
 			$this->redirect(array('action' => 'forum', $thread['ForumForum']['slug']));
 		}
 	}
@@ -616,8 +617,41 @@ class ForumsController extends ForumsAppController
 		}
 		else
 		{
+			$this->Session->setFlash('Thread type changed', null);
 			$this->redirect(array('action' => 'forum', $thread['ForumForum']['slug']));
 		}
 	}	
+	
+	function deleteThread($threadSlug)
+	{
+		$thread = $this->ForumThread->find('first', array('conditions' => array('ForumThread.slug' => $threadSlug), 'contain' => array('ForumForum')));
+		
+		$this->ForumThread->del($thread['ForumThread']['id']);
+		
+		$this->Session->setFlash('Thread deleted', null);
+		$this->redirect(array('action' => 'forum', $thread['ForumForum']['slug']));
+	}
+	
+	function moveThread($threadSlug, $moveTo = null)
+	{
+		if ($moveTo == null)
+		{
+			$thread = $this->ForumThread->find('first', array('conditions' => array('ForumThread.slug' => $threadSlug), 'contain' => false));
+		
+			$this->set('forums', $this->ForumThread->ForumForum->find('list', array('contain' => false, 'conditions' => array('ForumForum.id <>' => $thread['ForumThread']['forum_forum_id'], 'ForumForum.category' => 0))));
+		}
+		else
+		{
+			$thread = $this->ForumThread->find('first', array('conditions' => array('ForumThread.slug' => $threadSlug), 'contain' => array('ForumForum')));
+			
+			if ($this->ForumThread->ForumForum->find('count', array('conditions' => array('ForumForum.id' => $moveTo))))
+			{
+				$this->ForumThread->id = $thread['ForumThread']['id'];
+				$this->ForumThread->saveField('forum_forum_id', $moveTo);
+				$this->Session->setFlash('Thread moved', null);
+			}
+			$this->redirect(array('action' => 'forum', $thread['ForumForum']['slug']));
+		}
+	}
 }
 ?>

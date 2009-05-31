@@ -175,7 +175,7 @@ $(function()
 			$(this).unbind();
 		};
 		
-		$("#titleEdit").bind('blur', saveFunction)
+		$("#titleEdit").bind('blur', function(){saveFunction(this)})
 						.bind('keypress', function(e){
 							var key = e.keyCode || e.which;
 							if (key == 13)
@@ -200,7 +200,7 @@ $(function()
 			var titleSpan = $(_this).parents('span');
 			var itemId = tree1.selected.attr('id').split('_');
 			var value = $(_this).val();
-			
+			console.log(value);
 			if (value != currentTitle)
 			{
 				titleSpan.html('<img src="' +rootLink + '/img/throbber.gif" /> Saving...');
@@ -218,7 +218,7 @@ $(function()
 			$(this).unbind();
 		};
 		
-		$("#forumDescEdit").bind('blur', saveFunction)
+		$("#forumDescEdit").bind('blur', function(){saveFunction(this)})
 						.bind('keypress', function(e){
 							var key = e.keyCode || e.which;
 							if (key == 13)

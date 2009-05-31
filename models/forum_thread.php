@@ -24,7 +24,7 @@ function __compareNumber($a, $b)
 class ForumThread extends ForumsAppModel
 {
  var $name = 'ForumThread';
- var $belongsTo = array('ForumForum' => array('className' => 'Forums.ForumForum'), 'User' => array('fields' => array("id", "username")));
+ var $belongsTo = array('ForumForum' => array('className' => 'Forums.ForumForum', 'counterCache' => true), 'User' => array('fields' => array("id", "username")));
  var $hasMany = array('ForumPost' => array (
  							'className' => 'Forums.ForumPost',
  							'dependent' => true
@@ -50,7 +50,7 @@ class ForumThread extends ForumsAppModel
 			$returnThread['slug'] = $thread['ForumThread']['slug'];
 			$returnThread['description'] = $thread['ForumThread']['description'];
 			$returnThread['views'] = $thread['ForumThread']['views'];
-			$returnThread['number_posts'] = $this->ForumPost->find('count', array('contain' => false, 'conditions' => array('ForumPost.forum_thread_id' => $thread['ForumThread']['id'])));
+			$returnThread['number_posts'] = $thread['ForumThread']['forum_post_count'];
 			$returnThread['unreadPost'] = isset($thread['ForumUnreadPost'][0]['forum_thread_id']) ? 1 : 0;
 			$returnThread['type'] = $thread['ForumThread']['thread_type'];
 			$returnThread['locked'] = $thread['ForumThread']['locked'];

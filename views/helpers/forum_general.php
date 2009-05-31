@@ -30,6 +30,7 @@ class ForumGeneralHelper extends AppHelper
 			
 			if($permissions['moderate'])	
 			{
+				$output .= $this->Html->link('&nbsp;', array('controller' => 'forums', 'plugin' => 'forums', 'action' => 'moveThread', $thread['slug']), array('class' => 'moveAction icon sprite-move'), false, false);
 				$output .= $this->Html->link('&nbsp;', array('controller' => 'forums', 'plugin' => 'forums', 'action' => 'lock', $thread['slug']), array('class' => 'lockAction icon ' . (($thread['locked']) ? 'sprite-lock' : 'sprite-unlock')), false, false);
 				$output .= $this->Html->link('&nbsp;', array('controller' => 'forums', 'plugin' => 'forums', 'action' => 'deleteThread', $thread['slug']), array('class' => 'deleteAction icon sprite-delete'), false, false);
 			}
