@@ -1,5 +1,5 @@
 <?php
-	$html->css('/forums/css/forums', null, array(), false);
+	$css->link('/forums/css/forums', null, array(), false);
 
 	 $javascript->link('tiny_mce/tiny_mce_gzip', false);
 	 if (Configure::read('CMScout.CMScout Forums.editorType') == 0)

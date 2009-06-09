@@ -13,8 +13,13 @@ class ForumPost extends ForumsAppModel
 
  function getPageNumber($pageId, $perPage=25)
  {
-  	$viewPost = $this->find('first', array('conditions' => array('ForumPost.id' => $pageId), 'fields' => array('id', 'forum_thread_id','created'),
+ 	if(is_numeric($pageId))
+  		$viewPost = $this->find('first', array('conditions' => array('ForumPost.id' => $pageId), 'fields' => array('id', 'forum_thread_id','created'),
  										'contain' => false));
+  	else
+  		$viewPost = $this->find('first', array('conditions' => array('ForumPost.slug' => $pageId), 'fields' => array('id', 'forum_thread_id','created'),
+ 										'contain' => false));
+  	
   	$numberOfPost = $this->find('count', array("conditions" => array ('ForumPost.forum_thread_id' => $viewPost['ForumPost']['forum_thread_id'], 'ForumPost.id <=' => $pageId)));
   	return ceil($numberOfPost / $perPage);
  }

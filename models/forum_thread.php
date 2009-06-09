@@ -127,8 +127,7 @@ class ForumThread extends ForumsAppModel
 		
 		$returnData = array();
 
-		$this->recursive = 0;
-		$forum = $this->ForumForum->findById($thread['ForumThread']['forum_forum_id']);
+		$forum = $this->ForumForum->findById($thread['ForumThread']['forum_forum_id'], array('ForumCategory'));
 
 		$returnData[0]['title'] = $forum['ForumCategory']['title'];
 		$returnData[0]['slug'] = $forum['ForumCategory']['slug'];

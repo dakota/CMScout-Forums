@@ -68,8 +68,7 @@ class ForumForum extends ForumsAppModel
 	{
 		$returnData = array();
 
-		$this->recursive = 0;
-		$forum = $this->findBySlug($slug);
+		$forum = $this->findBySlug($slug, array('ForumCategory'));
 
 		$returnData[0]['title'] = $forum['ForumCategory']['title'];
 		$returnData[0]['slug'] = $forum['ForumCategory']['slug'];
