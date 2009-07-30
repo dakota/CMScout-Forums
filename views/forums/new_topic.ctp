@@ -24,13 +24,13 @@
 		else
 			$html->addCrumb($crumb['title'], array('controller' => 'forums', 'plugin' => 'forums', 'action' => 'forum', $crumb['slug']));
 	}
-	$html->addCrumb($forum['ForumForum']['title'], array('controller' => 'forums', 'plugin' => 'forums', 'action' => 'forum', $forum['ForumForum']['slug']));
+	$html->addCrumb($forum['Forum']['title'], array('controller' => 'forums', 'plugin' => 'forums', 'action' => 'forum', $forum['Forum']['slug']));
 
 
 	echo '<div class="breadcumbs">' . $html->getCrumbs(' > ') . '</div>';
 	echo '<div class="finalBreadcrumb">New topic</div>';
 
- echo $form->create('ForumThread', array('url' => array('controller' => 'forums', 'action' => 'newtopic', $forumSlug)));
+ echo $form->create('Thread', array('url' => array('controller' => 'forums', 'action' => 'newtopic', $forumSlug)));
  echo $form->input('title');
  echo $form->input('description');
  echo $form->input('tags', array('after' => '<a href="#" id="autoFill">Auto tag</a>', 'id' => 'postTags'));

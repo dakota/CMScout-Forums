@@ -14,7 +14,7 @@
 	echo '<div class="breadcumbs">' . $html->getCrumbs(' > ') . '</div>';
 	$paginator->options(array('url'=>$this->passedArgs));
 ?>
-<h2 class="finalBreadcrumb"><?php echo $forum['ForumForum']['title']; ?></h2>
+<h2 class="finalBreadcrumb"><?php echo $forum['Forum']['title']; ?></h2>
 <?php if (count($subForums)):?>
 <table class="forumTable">
 	<tr>
@@ -46,7 +46,7 @@
 				<?php endif;?>
 			</td>
 			<td>
-				<?php if (isset($subForum['lastPost']['ForumThread'])) : ?>
+				<?php if (isset($subForum['lastPost']['Thread'])) : ?>
 					<div class="lastPost"><?php echo $html->link($subForum['lastPost']['ForumThread']['title'], array('action' => 'thread', $subForum['lastPost']['ForumThread']['slug']));?><br>
 					by <?php echo $subForum['lastPost']['User']['username']; ?></div>
 					<div class="lastPostDate"><?php echo $time->niceShort($subForum['lastPost']['ForumPost']['created']);?>&nbsp;
@@ -60,21 +60,21 @@
 	<?php endforeach;?>
 </table>
 <?php endif;?>
-<div style="margin: 5px 2px;"><?php echo $html->link('New topic', array('action' => 'newTopic', $forum['ForumForum']['slug']), array('id' => 'newTopic', 'class'=>'button')); ?></div>
+<div style="margin: 5px 2px;"><?php echo $html->link('New topic', array('action' => 'newTopic', $forum['Forum']['slug']), array('id' => 'newTopic', 'class'=>'button')); ?></div>
 <?php if (count($announcementThreads) || count($stickyThreads) || count($threads)):?>
 <table class="forumTable">
 	<tr>
 		<th width="5%"></th>
 		<th><?php echo $paginator->sort('Thread', 'title'); ?></th>
-		<th width="20%"><?php echo $paginator->sort('Last Post', 'lastPost'); ?></th>
-		<th width="10%"><?php echo $paginator->sort('Replies', 'number_posts'); ?></th>
+		<th width="20%"><?php echo $paginator->sort('Last Post', 'LastPost.created'); ?></th>
+		<th width="10%"><?php echo $paginator->sort('Replies', 'post_count'); ?></th>
 		<th width="10%"><?php echo $paginator->sort('Views', 'views'); ?></th>
 	</tr>
 	<?php if (count($announcementThreads) > 0):?>
 	<tr>
 		<th colspan="5">Announcements</th>
 	</tr>
-		<?php echo $forumGeneral->drawThreads($announcementThreads, $permissions, $userInfo['User']['id']); ?>	
+		<?php echo $this->element('threads', array('threads' => $announcementThreads, 'permissions' => $permissions, 'userId' => $userInfo['User']['id'])); ?>	
 	<?php endif;?>
 	<tr>
 		<th colspan="5">Threads</th>
@@ -83,7 +83,7 @@
 		if (isset($stickyThreads) && count($stickyThreads) > 0)
 			$threads = am($stickyThreads, $threads);
 	?>	
-	<?php echo $forumGeneral->drawThreads($threads, $permissions, $userInfo['User']['id']);?>	
+		<?php echo $this->element('threads', array('threads' => $threads, 'permissions' => $permissions, 'userId' => $userInfo['User']['id'])); ?>	
 </table>
 <div class="paginate">
 	<ul>

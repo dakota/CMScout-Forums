@@ -20,52 +20,52 @@
 ?>
 <table class="forumTable">
 	<tr>
-		<th colspan="2"><?php echo $thread['ForumThread']['title'];?></th>
+		<th colspan="2"><?php echo $thread['Thread']['title'];?></th>
 	</tr>
 <?php foreach($posts as $post) :?>
 	<tr class="postRow">
 		<td>
-			<div class="username"><?php echo $post['User']['username'];?></div>
+			<div class="username"><?php echo $post['CreatedBy']['username'];?></div>
 
-			<?php if($post['User']['avatar'] != ''):?>
+			<?php if($post['CreatedBy']['avatar'] != ''):?>
 				<div class="avatar">
-					<?php echo $html->image('/avatars/' . $post['User']['avatar']); ?>
+					<?php echo $html->image('/avatars/' . $post['CreatedBy']['avatar']); ?>
 				</div>
 			<?php endif;?>
 		</td>
 		<td width="80%">
-			<a name="<?php echo $post['ForumPost']['id']; ?>"></a>
+			<a name="<?php echo $post['Post']['id']; ?>"></a>
 
-			<?php if ($post['ForumPost']['title'] != '') :?>
+			<?php if ($post['Post']['title'] != '') :?>
 				<div class="subject">
-					<?php echo $post['ForumPost']['title'];?>
+					<?php echo $post['Post']['title'];?>
 				</div>
 			<?php endif; ?>
 
 			<div class="created">
-				<?php echo $time->niceShort($post['ForumPost']['created']); ?>
+				<?php echo $time->niceShort($post['Post']['created']); ?>
 			</div>
 
-			<div class="post" rel="<?php echo $post['User']['username'];?>" id="<?php echo $post['ForumPost']['id']; ?>">
-				<?php echo $bbcode->parse($post['ForumPost']['text'], $html->url(array('controller' => 'forums', 'plugin' => 'forums', 'action' => 'thread', $thread['ForumThread']['slug'])));?>
+			<div class="post" rel="<?php echo $post['CreatedBy']['username'];?>" id="<?php echo $post['Post']['id']; ?>">
+				<?php echo $bbcode->parse($post['Post']['text'], $html->url(array('controller' => 'forums', 'plugin' => 'forums', 'action' => 'thread', $thread['Thread']['slug'])));?>
 			</div>
 			<div class="editor" style="display:none;">
 			</div>
 
 			<div class="actions">
-				<?php echo $html->link('Edit', array('controller' => 'forums', 'plugin' => 'forums', 'action' => 'editPost', $post['ForumPost']['id']), array('class' => 'edit'))?>&nbsp;
+				<?php echo $html->link('Edit', array('controller' => 'forums', 'plugin' => 'forums', 'action' => 'editPost', $post['Post']['id']), array('class' => 'edit'))?>&nbsp;
 				<a href="#quickReply" class="quickReply">Quick reply to this message</a>
 			</div>
-			<?php if($post['User']['signature'] != ''):?>
+			<?php if($post['CreatedBy']['signature'] != ''):?>
 				<div class="signature">
-					<?php echo $post['User']['signature']; ?>
+					<?php echo $post['CreatedBy']['signature']; ?>
 				</div>
 			<?php endif;?>
-			<?php if(isset($post['EditUser']['username'])) :?>
+			<?php if(isset($post['ModifiedBy']['username']) && $post['Post']['created'] != $post['Post']['modified']) :?>
 				<div class="edited">
-					Last edited by: <?php echo $post['EditUser']['username']; ?> on <?php echo $time->nice($post['ForumPost']['modified']);?>
-					<?php if ($post['ForumPost']['edit_reason'] != ''):?>
-					<br><em>Reason for edit: <?php echo $post['ForumPost']['edit_reason']; ?></em>
+					Last edited by: <?php echo $post['ModifiedBy']['username']; ?> on <?php echo $time->nice($post['Post']['modified']);?>
+					<?php if ($post['Post']['edit_reason'] != ''):?>
+					<br><em>Reason for edit: <?php echo $post['Post']['edit_reason']; ?></em>
 					<?php endif;?>
 				</div>
 			<?php endif; ?>
@@ -89,7 +89,7 @@
 <div id="quickReply">
 <h2>Quick Reply</h2><a name="quickReply"></a>
 <?php
-	 echo $form->create('ForumPost', array('url' => array('controller' => 'forums', 'action' => 'reply', $thread['ForumThread']['slug'])));
+	 echo $form->create('Post', array('url' => array('controller' => 'forums', 'action' => 'reply', $thread['Thread']['slug'])));
 	 echo $form->input('text', array('label' => 'Message', 'type' => 'textbox', 'rows' => 15, 'style' => 'width: 100%','class' => 'mceEditor', 'id' => 'postText'));
 	 echo $form->input('subscribe', array('label' => 'Notify me if anybody replies to this thread.', 'type' => 'checkbox', 'checked' => 1));
 ?>
@@ -109,7 +109,7 @@ String.prototype.trim = function() {
 		jConfirm('You are not on the last page of this thread, are you sure you wish to post your message?', 'Post message', function(selection){
 			if (selection)
 			{
-				$("#ForumPostAddForm").submit();
+				$("#PostAddForm").submit();
 			}
 		});
 		return false;
