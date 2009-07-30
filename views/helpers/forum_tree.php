@@ -14,7 +14,7 @@ class ForumTreeHelper extends AppHelper
   {
   	if (count($data))
   	{
-	  	$modelName = $level == 0 ? 'ForumCategory' : 'ForumForum';
+	  	$modelName = $level == 0 ? 'Category' : 'Forum';
 	  	$levelType = $level == 0 ? 'category' : 'forum';
 	  	
 	    $tabs = "\n" . str_repeat($this->tab, $level * 2);

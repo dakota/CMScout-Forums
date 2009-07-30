@@ -3,7 +3,7 @@ class ForumsController extends ForumsAppController
 {
 	var $name = 'Forums';
 	var $uses = array('Forums.Category', 'Forums.Thread', 'Forum.Post');
-	var $helpers = array('Bbcode', 'ForumTree', 'ForumGeneral');
+	var $helpers = array('Bbcode', 'ForumTree');
 	var $components = array('Notification');
 	/**
 	 * @var SessionComponent
@@ -239,12 +239,7 @@ class ForumsController extends ForumsAppController
 	}
 
 	function admin_index()
-	{	
-		if($this->Category->Forum->verify() !== true)
-		{
-			$this->Category->Forum->recover();
-		}
-		
+	{			
 		$categories = $this->Category->find('all', array('contain' => false));
 
 		foreach ($categories as $key => $category)
@@ -406,8 +401,18 @@ class ForumsController extends ForumsAppController
 		}
 		else
 		{
-			$category = $this->Category->find('first', array('contain' => false, 'conditions' => array('Category.id' => $node[1])));
-			$forumList = $this->Category->Forum->find('list', array('contain' => false, 'conditions' => array('Forum.category' => 0, 'Forum.category_id' => $node[1])));
+			$category = $this->Category->find('first', array('conditions' => array('Category.id' => $node[1]),
+															'contain' => array(
+																				'Forum' => array(
+																					'fields' => array('SUM(Forum.thread_count) as thread_count, SUM(Forum.post_count) as post_count'),
+																					'Thread' => array(
+																						'fields' => array('SUM(Thread.views) as views')
+																					)
+																				)
+																			)));
+			pr($category);
+			exit;
+			/*$forumList = $this->Category->Forum->find('list', array('contain' => false, 'conditions' => array('Forum.category' => 0, 'Forum.category_id' => $node[1])));
 			$numberThreads = $this->Category->Forum->Thread->find('count', array('contain' => false, 'conditions' => array('Thread.id' => array_keys($forumList))));
 			$numberViews = $this->Category->Forum->Thread->find('first', array('fields' => 'sum(Thread.views) as Views', 'contain' => false, 'conditions' => array('Thread.id' => array_keys($forumList))));
 			$threadList = $this->Category->Forum->Thread->find('list', array('contain' => false, 'conditions' => array('Thread.id' => array_keys($forumList))));
@@ -416,7 +421,7 @@ class ForumsController extends ForumsAppController
 			$firstPost = $this->Category->Forum->Thread->Post->find('first', array('contain' => false, 'conditions' => array('Post.thread_id' => array_keys($threadList)), 'order' => array('Post.created ASC')));
 			$activeUser = $this->Category->Forum->Thread->Post->find('first', array('contain' => array('User'), 'conditions' => array('Post.thread_id' => array_keys($threadList)), 'fields' => 'count(user_id) as UserPosts, Post.user_id', 'group' => 'Post.user_id', 'order' => 'UserPosts DESC'));
 			$days = ceil((strtotime($lastPost['Post']['created']) - strtotime($firstPost['Post']['created']))/86400);
-			$postsPerDay = $days > 0 ? $numberPosts/$days : 0;
+			$postsPerDay = $days > 0 ? $numberPosts/$days : 0;*/
 			
 			$this->set(compact('category', 'numberThreads', 'numberPosts', 'numberViews', 'lastPost', 'activeUser', 'postsPerDay'));
 			$this->render('admin_category_information');

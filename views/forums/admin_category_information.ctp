@@ -1,4 +1,4 @@
-<?php echo $html->link('Delete Category', array('action' => 'deleteCategory', $category['ForumCategory']['id']), array('id' => 'delete'));?>
+<?php echo $html->link('Delete Category', array('action' => 'deleteCategory', $category['Category']['id']), array('id' => 'delete'));?>
 <h2>Category information</h2>
 <table width="100%">
 	<tr>
@@ -7,7 +7,7 @@
 			<div style="float:right;">
 				<a href="#" id="editTitle">Edit</a>
 			</div>
-			<span id="title"><?php echo $category['ForumCategory']['title'];?></span>
+			<span id="title"><?php echo $category['Category']['title'];?></span>
 		</td>
 	</tr>
 	<tr class="altrow">

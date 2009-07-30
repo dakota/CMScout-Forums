@@ -71,8 +71,6 @@ class Thread extends ForumsAppModel
 	{
 		$returnData = array();
 	
-		$this->recursive = -1;
-	
 		$threads = $this->find('all', array('conditions' => array('Thread.thread_type' => $type, 'Thread.forum_id' => $forumId), 
 											'contain' => array('CreatedBy',
 														'LastPost',
@@ -104,8 +102,6 @@ class Thread extends ForumsAppModel
 			$useOrder = '';
 		}
 
-		$this->recursive = -1;
-
 		$threads = $this->find('all', compact('conditions', 'fields', 'limit', 'page', 'group', 'order') + $extra);
 
 		$returnData = $this->__configureThreads($threads);
@@ -125,7 +121,6 @@ class Thread extends ForumsAppModel
 	{
 		$returnData = array();
 
-		$this->recursive = -1;
 		$thread = $this->findBySlug($slug);
 
 		

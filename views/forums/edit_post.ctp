@@ -19,21 +19,8 @@
 	$css->link('/forums/css/forums', null, array(), false);
 
 	 $javascript->link('tiny_mce/tiny_mce_gzip', false);
-	 if (Configure::read('CMScout.CMScout Forums.editorType') == 0)
-	 {
-	 	$javascript->link('tinyMCE.gz.bbcode', false);
-	 	$javascript->link('tinyMCE.init.bbcode', false);
-	 }
-	 elseif (Configure::read('CMScout.CMScout Forums.editorType') == 1)
-	 {
-	 	$javascript->link('tinyMCE.gz.simple', false);
-	 	$javascript->link('tinyMCE.init.simple', false);
-	 }
-	 elseif (Configure::read('CMScout.CMScout Forums.editorType') == 2)
-	 {
-	 	$javascript->link('tinyMCE.gz', false);
-	 	$javascript->link('tinyMCE.init', false);
-	 }
+	 $javascript->link('tinyMCE.gz.bbcode', false);
+	 $javascript->link('tinyMCE.init.bbcode', false);
 
 	$html->addCrumb('Forums', array('controller' => 'forums', 'plugin' => 'forums', 'action' => 'index'));
 	foreach ($breadcrumbs as $key => $crumb)

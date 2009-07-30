@@ -35,7 +35,7 @@
 <div id="newCatDialog" style="display: none;">
 	<div class="input text">
 		<label for="catTitle"><?php __('Title'); ?></label>
-		<input name="data[ForumCategory][title]" type="text" maxlength="255" value="" id="catTitle" style="width: 95%;" />
+		<input name="data[Category][title]" type="text" maxlength="255" value="" id="catTitle" style="width: 95%;" />
 	</div>
 </div>
 
