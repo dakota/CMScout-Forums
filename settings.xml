@@ -5,4 +5,6 @@
 	<version>1.0</version>
 	<category>Mini Application</category>
 	<type>forum</type>
+	<author>CMScout</author>
+	<description>Advanced forum system.</description>	
 </plugin>
