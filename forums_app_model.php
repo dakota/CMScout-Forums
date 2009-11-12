@@ -1,5 +1,5 @@
 <?php
 class ForumsAppModel extends AppModel {
-	var $tablePrefix = 'forum_';
+	public $tablePrefix = 'forums_';
 }
 ?>

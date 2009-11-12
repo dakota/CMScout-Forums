@@ -5,9 +5,7 @@ class Post extends ForumsAppModel
  var $belongsTo = array('Thread' => array('className' => 'Forums.Thread', 'counterCache' => true),
  						'Forum' => array('className' => 'Forums.Forum', 'counterCache' => true));
  
- var $actsAs = array('Tag'=>array('table_label'=>'tags', 'tags_label'=>'tag', 'separator'=>','), 'Sluggable', 'WhoDidIt');
-
- var $hasAndBelongsToMany = array('Tag' => array('joinTable' => 'forum_posts_tags'));
+ var $actsAs = array('Sluggable', 'WhoDidIt');
 
  function getPageNumber($pageId, $perPage=25)
  {
