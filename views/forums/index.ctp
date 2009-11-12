@@ -1,5 +1,5 @@
 <?php
-	$css->link('/forums/css/forums', null, array(), false);
+	$html->css('/forums/css/forums', null, array(), false);
 
 	if (isset($category))
 	{

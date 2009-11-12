@@ -1,6 +1,6 @@
 <?php 
-	$css->link('tree_component', null, array(), false);
-	$css->link('tree_component_theme', null, array(), false);
+	$html->css('tree_component', null, array(), false);
+	$html->css('tree_component_theme', null, array(), false);
 	
 	$javascript->link('/forums/js/forums_admin_index', false);
 	$javascript->link('tree_component', false);

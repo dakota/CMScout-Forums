@@ -76,7 +76,7 @@ $(function()
 			'Add': function() {
 				$(this).dialog('close');
 
-				var postData = 'data[ForumCategory][title]=' + $("#catTitle").val();
+				var postData = 'data[Category][title]=' + $("#catTitle").val();
 
 				$("#catTitle").val('');
 				
@@ -114,11 +114,11 @@ $(function()
 				
 				if (selectedId[0] == 'category')
 				{
-					var postData = 'data[ForumForum][title]=' + $("#forumTitle").val() + '&data[ForumForum][description]=' + $("#forumDescription").val() + '&data[ForumForum][forum_category_id]=' + selectedId[1];
+					var postData = 'data[Forum][title]=' + $("#forumTitle").val() + '&data[Forum][description]=' + $("#forumDescription").val() + '&data[Forum][forum_category_id]=' + selectedId[1];
 				}
 				else
 				{
-					var postData = 'data[ForumForum][title]=' + $("#forumTitle").val() + '&data[ForumForum][description]=' + $("#forumDescription").val() + '&data[ForumForum][parent_id]=' + selectedId[1];
+					var postData = 'data[Forum][title]=' + $("#forumTitle").val() + '&data[Forum][description]=' + $("#forumDescription").val() + '&data[Forum][parent_id]=' + selectedId[1];
 				}
 
 				$("#forumTitle").val('');
@@ -156,11 +156,11 @@ $(function()
 				titleSpan.html('<img src="' +rootLink + '/img/throbber.gif" /> Saving...');
 				if (itemId[0] == 'category')
 				{
-					var postData = 'data[ForumCategory][title]=' + value + '&data[ForumCategory][id]=' + itemId[1];
+					var postData = 'data[Category][title]=' + value + '&data[Category][id]=' + itemId[1];
 				}
 				else
 				{
-					var postData = 'data[ForumForum][title]=' + value + '&data[ForumForum][id]=' + itemId[1];
+					var postData = 'data[Forum][title]=' + value + '&data[Forum][id]=' + itemId[1];
 				}
 				
 				$.post(controllerLink + 'editTitle', postData, function(returnData){
@@ -205,7 +205,7 @@ $(function()
 			{
 				titleSpan.html('<img src="' +rootLink + '/img/throbber.gif" /> Saving...');
 
-				var postData = 'data[ForumForum][description]=' + value + '&data[ForumForum][id]=' + itemId[1];
+				var postData = 'data[Forum][description]=' + value + '&data[Forum][id]=' + itemId[1];
 				
 				$.post(controllerLink + 'editDescription', postData, function(returnData){
 					titleSpan.html(returnData);

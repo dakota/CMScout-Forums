@@ -20,11 +20,11 @@
 	</tr>
 	<tr class="altrow">
 		<th width="30%" style="text-align:right;padding-right: 10px;">Number of thread views</th>
-		<td style="text-align:left;"><?php echo $numberViews[0]['Views'];?></td>
+		<td style="text-align:left;"><?php echo $numberViews;?></td>
 	</tr>
 	<tr>
 		<th width="30%" style="text-align:right;padding-right: 10px;">Most active user</th>
-		<td style="text-align:left;"><?php if (isset($activeUser['User']['username'])):?><?php echo $activeUser['User']['username'];?> with <?php echo $activeUser[0]['UserPosts'];?> posts<?php else :?>No posts<?php endif;?></td>
+		<td style="text-align:left;"><?php if (isset($activeUser['CreatedBy']['username'])):?><?php echo $activeUser['CreatedBy']['username'];?> with <?php echo $activeUser[0]['UserPosts'];?> posts<?php else :?>No posts<?php endif;?></td>
 	</tr>
 	<tr class="altrow">
 		<th width="30%" style="text-align:right;padding-right: 10px;">Average posts per day</th>

@@ -41,6 +41,7 @@ class Thread extends ForumsAppModel
  							'className' => 'Forums.Post',
  							'order' => 'LastPost.created DESC',
  							'limit' => 1));
+ 						
  var $actsAs = array('Sluggable', 'WhoDidIt');
 
 	 function __configureThreads($threads)

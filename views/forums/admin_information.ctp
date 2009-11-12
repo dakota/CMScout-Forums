@@ -1,4 +1,4 @@
-<?php echo $html->link('Delete Forum', array('action' => 'deleteForum', $forum['ForumForum']['id']), array('id' => 'delete'));?>
+<?php echo $html->link('Delete Forum', array('action' => 'deleteForum', $forum['Forum']['id']), array('id' => 'delete'));?>
 <h2>Forum information</h2>
 <table width="100%">
 	<tr>
@@ -7,7 +7,7 @@
 			<div style="float:right;">
 				<a href="#" id="editTitle">Edit</a>
 			</div>
-			<span id="title"><?php echo $forum['ForumForum']['title'];?></span>
+			<span id="title"><?php echo $forum['Forum']['title'];?></span>
 		</td>
 	</tr>
 	<tr class="altrow">
@@ -16,7 +16,7 @@
 			<div style="float:right;">
 				<a href="#" id="editForumDesc">Edit</a>
 			</div>
-			<span id="forumDesc"><?php echo $forum['ForumForum']['description'];?></span>
+			<span id="forumDesc"><?php echo $forum['Forum']['description'];?></span>
 		</td>
 	</tr>
 	<tr>
@@ -33,7 +33,7 @@
 	</tr>
 	<tr class="altrow">
 		<th width="30%" style="text-align:right;padding-right: 10px;">Most active user</th>
-		<td style="text-align:left;"><?php if (isset($activeUser['User']['username'])):?><?php echo $activeUser['User']['username'];?> with <?php echo $activeUser[0]['UserPosts'];?> posts<?php else :?>No posts<?php endif;?></td>
+		<td style="text-align:left;"><?php if (isset($activeUser['CreatedBy']['username'])):?><?php echo $activeUser['CreatedBy']['username'];?> with <?php echo $activeUser[0]['UserPosts'];?> posts<?php else :?>No posts<?php endif;?></td>
 	</tr>
 	<tr>
 		<th width="30%" style="text-align:right;padding-right: 10px;">Average posts per day</th>

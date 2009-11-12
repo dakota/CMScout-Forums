@@ -1,5 +1,5 @@
 <?php
-	$css->link('/forums/css/forums', null, array(), false);
+	$html->css('/forums/css/forums', null, array(), false);
 
 	 $javascript->link('tiny_mce/tiny_mce_gzip', false);
 	 $javascript->link('tinyMCE.gz.bbcode', false);

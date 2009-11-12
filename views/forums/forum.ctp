@@ -1,5 +1,5 @@
 <?php
-	$css->link('/forums/css/forums', null, array(), false);
+	$html->css('/forums/css/forums', null, array(), false);
 	$javascript->link('/forums/js/forums_index', false);
 	
 	$html->addCrumb('Forums', array('controller' => 'forums', 'plugin' => 'forums', 'action' => 'index'));
