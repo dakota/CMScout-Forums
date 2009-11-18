@@ -13,7 +13,7 @@ class Forum extends ForumsAppModel
 							'limit' => 1));
 
 	var $belongsTo = array('Category' => array('className' => 'Forums.Category'));
-	
+
 	var $order = "Forum.lft ASC";
 
 	function fetchSubForums($slug, $userId)
@@ -67,6 +67,24 @@ class Forum extends ForumsAppModel
 	function parentNode()
 	{
 		return "CMScout Forums";
+	}
+
+	function addForum($data)
+	{
+		if (isset($data['Forum']['parent_id']))
+		{
+			$parent = $this->find('first', array('contain' => false, 'fields' => array('Forum.category_id'), 'conditions' => array('Forum.id' => $data['Forum']['parent_id'])));
+			$data['Forum']['category_id'] = $parent['Forum']['category_id'];
+		}
+		elseif (isset($data['Forum']['category_id']))
+		{
+			$categoryParent = $this->find('first', array('contain' => false, 'fields' => array('Forum.id'), 'conditions' => array('Forum.category_id' => $data['Forum']['category_id'], 'Forum.category' => 1)));
+			$data['Forum']['parent_id'] = $categoryParent['Forum']['id'];
+		}
+		$data['Forum']['title'] = trim($data['Forum']['title']);
+
+		$this->save($data);
+		return array('title' => $data['Forum']['title'], 'id' => 'forum_' . $this->id);
 	}
 }
 ?>

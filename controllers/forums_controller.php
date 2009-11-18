@@ -5,18 +5,12 @@ class ForumsController extends ForumsAppController
 	var $uses = array('Forums.Category', 'Forums.Thread', 'Forum.Post');
 	var $helpers = array('Bbcode', 'ForumTree');
 	var $components = array('Notification');
-	/**
-	 * @var SessionComponent
-	 */
-	var $Session;
-	/**
-	 * @var AclComponent
-	 */
-	var $AclExtend;
-	/**
-	 * @var AuthComponent
-	 */
-	var $Auth;
+
+	 public	$actionMap = array(
+  		'admin_index' => 'read'
+ 	);
+ 	
+ 	public $adminNode = 'Forum Manager'; 
 
 	var $paginate = array('Post' =>
 									array(
@@ -340,41 +334,15 @@ class ForumsController extends ForumsAppController
 
 	function admin_addCategory()
 	{
-		$this->data['Category']['title'] = trim($this->data['Category']['title']);
-		$this->Category->save($this->data);
-		
-		$fakeForum = array();
-		$fakeForum['Forum']['category_id'] = $this->Category->id;
-		$fakeForum['Forum']['category'] = 1;
-		$fakeForum['Forum']['parent_id'] = null;
-		
-		$this->Category->Forum->Behaviors->detach('Acl');
-		$this->Category->Forum->save($fakeForum);
-		
-		$return = array('title' => $this->data['Category']['title'], 'id' => 'category_' . $this->Category->id);
 		$this->view = 'Json';
-		$this->set('data', $return);
+		$this->set('data', $this->Category->addCategory($this->data));
 		$this->set('json', 'data');
 	}
 
 	function admin_addForum()
 	{
-		if (isset($this->data['Forum']['parent_id']))
-		{
-			$parent = $this->Category->Forum->find('first', array('contain' => false, 'fields' => array('Forum.category_id'), 'conditions' => array('Forum.id' => $this->data['Forum']['parent_id'])));
-			$this->data['Forum']['category_id'] = $parent['Forum']['category_id'];
-		}
-		elseif (isset($this->data['Forum']['category_id']))
-		{
-			$categoryParent = $this->Category->Forum->find('first', array('contain' => false, 'fields' => array('Forum.id'), 'conditions' => array('Forum.category_id' => $this->data['Forum']['category_id'], 'Forum.category' => 1)));
-			$this->data['Forum']['parent_id'] = $categoryParent['Forum']['id'];
-		}
-		$this->data['Forum']['title'] = trim($this->data['Forum']['title']);
-		
-		$this->Category->Forum->save($this->data);
-		$return = array('title' => $this->data['Forum']['title'], 'id' => 'forum_' . $this->Category->Forum->id);
 		$this->view = 'Json';
-		$this->set('data', $return);
+		$this->set('data', $this->Category->Forum->addForum($this->data));
 		$this->set('json', 'data');
 	}
 	

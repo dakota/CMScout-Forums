@@ -43,5 +43,21 @@ class Category extends ForumsAppModel
 
  	return $categories;
  }
+
+ function addCategory($data)
+ {
+	$data['Category']['title'] = trim($data['Category']['title']);
+	$this->save($data);
+
+	$fakeForum = array();
+	$fakeForum['Forum']['category_id'] = $this->id;
+	$fakeForum['Forum']['category'] = 1;
+	$fakeForum['Forum']['parent_id'] = null;
+
+	$this->Forum->Behaviors->detach('Acl');
+	$this->Forum->save($fakeForum);
+
+	return array('title' => $data['Category']['title'], 'id' => 'category_' . $Category->id);
+ }
 }
 ?>

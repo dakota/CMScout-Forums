@@ -18,7 +18,7 @@ $(function()
  				new_node: "New category/forum"
  			},
  			ui : {
- 				theme_path: rootLink + 'themed/' + themeDir + '/img/'
+ 				theme_path: themeDir + '/img/'
  			},
  			rules : {
  				use_inline : true, 
@@ -114,7 +114,7 @@ $(function()
 				
 				if (selectedId[0] == 'category')
 				{
-					var postData = 'data[Forum][title]=' + $("#forumTitle").val() + '&data[Forum][description]=' + $("#forumDescription").val() + '&data[Forum][forum_category_id]=' + selectedId[1];
+					var postData = 'data[Forum][title]=' + $("#forumTitle").val() + '&data[Forum][description]=' + $("#forumDescription").val() + '&data[Forum][category_id]=' + selectedId[1];
 				}
 				else
 				{
