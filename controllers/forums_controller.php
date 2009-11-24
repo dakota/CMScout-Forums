@@ -3,11 +3,14 @@ class ForumsController extends ForumsAppController
 {
 	var $name = 'Forums';
 	var $uses = array('Forums.Category', 'Forums.Thread', 'Forum.Post');
-	var $helpers = array('Bbcode', 'ForumTree');
+	var $helpers = array('Bbcode', 'Forums.ForumTree');
 	var $components = array('Notification');
 
 	 public	$actionMap = array(
-  		'admin_index' => 'read'
+  		'admin_index' => 'read',
+	 	'admin_addCategory' => 'create',
+	 	'admin_addForum' => 'create',
+	 	'admin_homepageEdit' => array('Core Configuration', 'update')
  	);
  	
  	public $adminNode = 'Forum Manager'; 
@@ -24,10 +27,12 @@ class ForumsController extends ForumsAppController
 
 	function index($slug = null)
 	{
-		$this->set('categories', $this->Category->fetchCategories($slug, $this->_userDetails['User']['id']));
+		$categories = $this->Category->fetchCategories($slug, $this->_userDetails['User']['id']);
 		
 		if ($slug != null)
-			$this->set('category', $this->Category->findBySlug($slug));
+			$category = $this->Category->findBySlug($slug);
+			
+		$this->set(compact('categories', 'category'));
 	}
 
 	function forum($slug = null)
@@ -231,8 +236,88 @@ class ForumsController extends ForumsAppController
 
 		exit;
 	}
+	
+	function lock($threadSlug)
+	{
+		$thread = $this->Thread->find('first', array('conditions' => array('Thread.slug' => $threadSlug), 'contain' => array('Forum')));
 
-	function admin_index()
+		$this->Thread->id = $thread['Thread']['id'];
+		$this->Thread->saveField('locked', !$thread['Thread']['locked']);	
+		
+		if($this->_isAjax)
+		{
+			exit;
+		}
+		else
+		{
+			$this->redirect(array('action' => 'forum', $thread['Forum']['slug']));
+		}
+	}
+	
+	function threadType($threadSlug, $type)
+	{
+		$thread = $this->Thread->find('first', array('conditions' => array('Thread.slug' => $threadSlug), 'contain' => array('Forum')));
+
+		if ($type == 'sticky' && $thread['Thread']['thread_type'] != 'STICKY')
+		{
+			$newType = 'STICKY';
+		}
+		elseif ($type == 'announce' && $thread['Thread']['thread_type'] != 'ANNOUNCEMENT')
+		{
+			$newType = 'ANNOUNCEMENT';
+		}
+		else
+		{
+			$newType = 'NORMAL';
+		}
+
+		$this->Thread->id = $thread['Thread']['id'];
+		$this->Thread->saveField('thread_type', $newType);			
+		
+		if($this->_isAjax)
+		{
+			exit;
+		}
+		else
+		{
+			$this->Session->setFlash('Thread type changed', null);
+			$this->redirect(array('action' => 'forum', $thread['Forum']['slug']));
+		}
+	}	
+	
+	function deleteThread($threadSlug)
+	{
+		$thread = $this->Thread->find('first', array('conditions' => array('Thread.slug' => $threadSlug), 'contain' => array('Forum')));
+		
+		$this->Thread->del($thread['Thread']['id']);
+		
+		$this->Session->setFlash('Thread deleted', null);
+		$this->redirect(array('action' => 'forum', $thread['Forum']['slug']));
+	}
+	
+	function moveThread($threadSlug, $moveTo = null)
+	{
+		if ($moveTo == null)
+		{
+			$thread = $this->Thread->find('first', array('conditions' => array('Thread.slug' => $threadSlug), 'contain' => false));
+		
+			$this->set('forums', $this->Thread->Forum->find('list', array('contain' => false, 'conditions' => array('Forum.id <>' => $thread['Thread']['forum_id'], 'Forum.category' => 0))));
+		}
+		else
+		{
+			$thread = $this->Thread->find('first', array('conditions' => array('Thread.slug' => $threadSlug), 'contain' => array('Forum')));
+			
+			if ($this->Thread->Forum->find('count', array('conditions' => array('Forum.id' => $moveTo))))
+			{
+				$this->Thread->id = $thread['Thread']['id'];
+				$this->Thread->saveField('forum_id', $moveTo);
+				$this->Session->setFlash('Thread moved', null);
+			}
+			$this->redirect(array('action' => 'forum', $thread['Forum']['slug']));
+		}
+	}
+	
+function admin_index()
 	{			
 		$categories = $this->Category->find('all', array('contain' => false));
 
@@ -544,85 +629,13 @@ class ForumsController extends ForumsAppController
 			$this->set('json', 'data');
 		}
 	}
-	
-	function lock($threadSlug)
-	{
-		$thread = $this->Thread->find('first', array('conditions' => array('Thread.slug' => $threadSlug), 'contain' => array('Forum')));
 
-		$this->Thread->id = $thread['Thread']['id'];
-		$this->Thread->saveField('locked', !$thread['Thread']['locked']);	
-		
-		if($this->_isAjax)
-		{
-			exit;
-		}
-		else
-		{
-			$this->redirect(array('action' => 'forum', $thread['Forum']['slug']));
-		}
-	}
-	
-	function threadType($threadSlug, $type)
+	function admin_homepageEdit()
 	{
-		$thread = $this->Thread->find('first', array('conditions' => array('Thread.slug' => $threadSlug), 'contain' => array('Forum')));
-
-		if ($type == 'sticky' && $thread['Thread']['thread_type'] != 'STICKY')
-		{
-			$newType = 'STICKY';
-		}
-		elseif ($type == 'announce' && $thread['Thread']['thread_type'] != 'ANNOUNCEMENT')
-		{
-			$newType = 'ANNOUNCEMENT';
-		}
-		else
-		{
-			$newType = 'NORMAL';
-		}
-
-		$this->Thread->id = $thread['Thread']['id'];
-		$this->Thread->saveField('thread_type', $newType);			
+		$this->set('forums', $this->Category->Forum->find('list', array('fields' => array('Forum.slug', 'Forum.title'))));
 		
-		if($this->_isAjax)
-		{
-			exit;
-		}
-		else
-		{
-			$this->Session->setFlash('Thread type changed', null);
-			$this->redirect(array('action' => 'forum', $thread['Forum']['slug']));
-		}
-	}	
-	
-	function deleteThread($threadSlug)
-	{
-		$thread = $this->Thread->find('first', array('conditions' => array('Thread.slug' => $threadSlug), 'contain' => array('Forum')));
-		
-		$this->Thread->del($thread['Thread']['id']);
-		
-		$this->Session->setFlash('Thread deleted', null);
-		$this->redirect(array('action' => 'forum', $thread['Forum']['slug']));
-	}
-	
-	function moveThread($threadSlug, $moveTo = null)
-	{
-		if ($moveTo == null)
-		{
-			$thread = $this->Thread->find('first', array('conditions' => array('Thread.slug' => $threadSlug), 'contain' => false));
-		
-			$this->set('forums', $this->Thread->Forum->find('list', array('contain' => false, 'conditions' => array('Forum.id <>' => $thread['Thread']['forum_id'], 'Forum.category' => 0))));
-		}
-		else
-		{
-			$thread = $this->Thread->find('first', array('conditions' => array('Thread.slug' => $threadSlug), 'contain' => array('Forum')));
-			
-			if ($this->Thread->Forum->find('count', array('conditions' => array('Forum.id' => $moveTo))))
-			{
-				$this->Thread->id = $thread['Thread']['id'];
-				$this->Thread->saveField('forum_id', $moveTo);
-				$this->Session->setFlash('Thread moved', null);
-			}
-			$this->redirect(array('action' => 'forum', $thread['Forum']['slug']));
-		}
+		if(isset($this->params['named']['fieldValue']))
+			$this->set('values', unserialize(urldecode($this->params['named']['fieldValue'])));
 	}
 }
 ?>

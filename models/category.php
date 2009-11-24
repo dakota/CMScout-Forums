@@ -57,7 +57,7 @@ class Category extends ForumsAppModel
 	$this->Forum->Behaviors->detach('Acl');
 	$this->Forum->save($fakeForum);
 
-	return array('title' => $data['Category']['title'], 'id' => 'category_' . $Category->id);
+	return array('title' => $data['Category']['title'], 'id' => 'category_' . $this->id);
  }
 }
 ?>

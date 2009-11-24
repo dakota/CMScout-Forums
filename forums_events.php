@@ -30,6 +30,21 @@ class ForumsEvents extends Object
 
 		return $menuLinks;
 	}
+	
+	function onGetAvailableHomePages($event)
+	{
+		$homepages = array(
+			array(
+				'title' => 'Forum page',
+				'plugin' => $event->plugin,
+				'controller' => 'forums',
+				'action' => 'index',
+				'edit_action' => 'homepageEdit'
+			)
+		);
+		
+		return $homepages;
+	}
 
 	function onInstall($event)
 	{
