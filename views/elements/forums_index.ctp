@@ -12,7 +12,4 @@
 		Cache::write($cacheName, $results, 'core');
 	}
 	
-	
-	//$results = $this->requestAction(array('controller' => 'forums', 'action' => 'index', 'plugin' => 'forums'), array('named' => $options));
-	
 	echo $this->element('../forums/index', array_merge(array('plugin' => 'forums'), $results));

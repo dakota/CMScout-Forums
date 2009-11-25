@@ -8,10 +8,11 @@ class ForumsController extends ForumsAppController
 
 	 public	$actionMap = array(
   		'admin_index' => 'read',
-	 	'admin_addCategory' => 'create',
-	 	'admin_addForum' => 'create',
-	 	'admin_homepageEdit' => array('Core Configuration', 'update')
- 	);
+	 	'admin_add_category' => 'create',
+	 	'admin_add_forum' => 'create',
+	 	'admin_homepage_edit' => array('Core Configuration', 'update'),
+	 	'admin_menu_edit' => array('Menu Manager', 'update')
+	 );
  	
  	public $adminNode = 'Forum Manager'; 
 
@@ -417,14 +418,14 @@ function admin_index()
 		exit;
 	}
 
-	function admin_addCategory()
+	function admin_add_category()
 	{
 		$this->view = 'Json';
 		$this->set('data', $this->Category->addCategory($this->data));
 		$this->set('json', 'data');
 	}
 
-	function admin_addForum()
+	function admin_add_forum()
 	{
 		$this->view = 'Json';
 		$this->set('data', $this->Category->Forum->addForum($this->data));
@@ -478,7 +479,7 @@ function admin_index()
 		}
 	}
 	
-	function admin_editTitle()
+	function admin_edit_title()
 	{
 		if(isset($this->data['Forum']))
 		{
@@ -493,7 +494,7 @@ function admin_index()
 		exit;
 	}
 	
-	function admin_editDescription()
+	function admin_edit_description()
 	{
 		if(isset($this->data['Forum']))
 		{
@@ -503,7 +504,7 @@ function admin_index()
 		exit;
 	}	
 	
-	function admin_deleteForum($id = null)
+	function admin_delete_forum($id = null)
 	{
 		if (!count($this->params['form']))
 		{
@@ -578,7 +579,7 @@ function admin_index()
 		}
 	}
 	
-	function admin_deleteCategory($id = null)
+	function admin_delete_category($id = null)
 	{
 		if (!count($this->params['form']))
 		{
@@ -630,12 +631,17 @@ function admin_index()
 		}
 	}
 
-	function admin_homepageEdit()
+	function admin_homepage_edit()
 	{
 		$this->set('forums', $this->Category->Forum->find('list', array('fields' => array('Forum.slug', 'Forum.title'))));
 		
 		if(isset($this->params['named']['fieldValue']))
 			$this->set('values', unserialize(urldecode($this->params['named']['fieldValue'])));
+	}
+	
+	function admin_menu_edit()
+	{
+		$this->set('forums', $this->Category->Forum->find('list', array('fields' => array('Forum.slug', 'Forum.title'))));
 	}
 }
 ?>
