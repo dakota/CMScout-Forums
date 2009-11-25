@@ -1,8 +1,8 @@
 <?php 
 /* SVN FILE: $Id$ */
-/* Cmscout schema generated on: 2009-11-13 07:11:50 : 1258095950*/
-class ForumsSchema extends CakeSchema {
-	var $name = 'Forums';
+/* Cmscout schema generated on: 2009-11-25 08:11:58 : 1259138038*/
+class CmscoutSchema extends CakeSchema {
+	var $name = 'Cmscout';
 
 	function before($event = array()) {
 		return true;
